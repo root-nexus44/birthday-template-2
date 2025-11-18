@@ -1,0 +1,459 @@
+<!-- Template 2 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="description" content="Cyberpunk Neon Birthday Wish">
+<title>Happy Birthday | Neon Cyber Wish</title>
+<style>
+  /* ===== CSS VARIABLES & RESET ===== */
+  :root {
+    --neon-cyan: #00f3ff;
+    --neon-purple: #7a00ff;
+    --neon-pink: #ff00e1;
+    --neon-green: #39ff14;
+    --neon-blue: #4dc9ff;
+    --bg-dark: #020307;
+    --bg-darker: #000000;
+    --text-primary: #e6f7ff;
+    --text-muted: #9bbad3;
+    --shadow-neon: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-pink);
+    --shadow-glow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ===== LOADING SCREEN ===== */
+  #loading {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: 
+      radial-gradient(circle at 50% 50%, rgba(0, 20, 40, 0.9) 0%, var(--bg-darker) 100%),
+      repeating-linear-gradient(0deg, transparent, transparent 2.5vh, rgba(0, 255, 255, 0.05) 2.5vh, rgba(0, 255, 255, 0.05) 2.6vh),
+      repeating-linear-gradient(90deg, transparent, transparent 2.5vw, rgba(0, 255, 255, 0.05) 2.5vw, rgba(0, 255, 255, 0.05) 2.6vw);
+  }
+
+  #matrix {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+  }
+
+  #countdown {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(3rem, 15vw, 8rem);
+    font-weight: 900;
+    color: var(--neon-green);
+    text-shadow: var(--shadow-glow);
+    letter-spacing: 0.1em;
+    animation: glitch 1.5s infinite;
+  }
+
+  @keyframes glitch {
+    0%, 100% { transform: translate(0) skew(0deg); text-shadow: 2px -2px 0 var(--neon-pink), -2px 2px 0 var(--neon-blue), var(--shadow-glow); }
+    10% { transform: translate(-0.2rem, 0.2rem) skew(-0.5deg); text-shadow: -3px 3px 0 var(--neon-pink), 3px -3px 0 var(--neon-blue), var(--shadow-glow); }
+    20% { transform: translate(0.2rem, -0.2rem) skew(0.5deg); text-shadow: 3px -3px 0 var(--neon-pink), -3px 3px 0 var(--neon-blue), var(--shadow-glow); }
+  }
+
+  #giftBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  #giftBox.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: pulse 2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { filter: drop-shadow(0 0 10px var(--neon-cyan)) drop-shadow(0 0 20px var(--neon-pink)); }
+    to { filter: drop-shadow(0 0 20px var(--neon-cyan)) drop-shadow(0 0 40px var(--neon-pink)) drop-shadow(0 0 60px var(--neon-purple)); }
+  }
+
+  .gift-svg {
+    width: min(40vmin, 280px);
+    height: auto;
+  }
+
+  .gift-lid {
+    transform-origin: center bottom;
+    animation: lidFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes lidFloat {
+    0%, 100% { transform: rotateX(0deg) translateY(0); }
+    50% { transform: rotateX(15deg) translateY(-0.5rem); }
+  }
+
+  /* ===== MAIN PAGE ===== */
+  #main {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: 
+      radial-gradient(1200px 800px at 20% -30%, rgba(0, 243, 255, 0.1) 0%, transparent 60%),
+      linear-gradient(135deg, var(--bg-dark) 0%, #0a0f1a 100%);
+  }
+
+  #confetti {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: min(90vw, 900px);
+    width: 100%;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    background: rgba(5, 7, 15, 0.7);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-neon);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .neon-title {
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-pink);
+    animation: titleGlow 3s infinite alternate;
+  }
+
+  @keyframes titleGlow {
+    from { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple); }
+    to { text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-purple), 0 0 60px var(--neon-pink); }
+  }
+
+  .message {
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    line-height: 1.6;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: var(--text-muted);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    border-left: 2px solid var(--neon-pink);
+    border-right: 2px solid var(--neon-pink);
+    padding: 1rem;
+  }
+
+  .ui-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .chip {
+    padding: 0.8rem 1.5rem;
+    border: 1px solid var(--neon-cyan);
+    border-radius: 2rem;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--neon-cyan);
+    background: rgba(10, 15, 30, 0.8);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .chip:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--neon-pink);
+  }
+
+  .cta {
+    padding: 0.8rem 2.5rem;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .cta:hover {
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* ===== HOLOGRAM BALLOONS ===== */
+  .orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb {
+    position: absolute;
+    width: clamp(2.5rem, 8vmin, 5rem);
+    height: clamp(3rem, 10vmin, 6rem);
+    background: radial-gradient(circle at 30% 30%, var(--neon-green), transparent 60%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    filter: blur(2px);
+    opacity: 0.6;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-1rem) translateX(0.5rem); }
+    50% { transform: translateY(0.5rem) translateX(-0.5rem); }
+    75% { transform: translateY(-0.5rem) translateX(0.3rem); }
+  }
+
+  /* ===== RESPONSIVE BREAKPOINTS ===== */
+  @media (min-width: 320px) { html { font-size: 14px; } }
+  @media (min-width: 480px) { html { font-size: 15px; } }
+  @media (min-width: 768px) { html { font-size: 16px; } }
+  @media (min-width: 1024px) { html { font-size: 17px; } }
+  @media (min-width: 1440px) { html { font-size: 18px; } }
+</style>
+</head>
+<body>
+  <!-- ===== LOADING SCREEN ===== -->
+  <section id="loading" aria-label="Loading screen">
+    <canvas id="matrix" aria-hidden="true"></canvas>
+    <div id="countdown" aria-live="polite">5</div>
+    <div class="countdown-label">System Booting...</div>
+    
+    <div id="giftBox" role="button" tabindex="0" aria-label="Open gift box">
+      <svg class="gift-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0a0a20" />
+            <stop offset="100%" stop-color="#1a1a3a" />
+          </linearGradient>
+        </defs>
+        <rect x="40" y="80" width="120" height="90" rx="10" fill="url(#boxGrad)" stroke="var(--neon-cyan)" stroke-width="3"/>
+        <g class="gift-lid">
+          <rect x="35" y="58" width="130" height="30" rx="8" fill="#111" stroke="var(--neon-pink)" stroke-width="2"/>
+          <rect x="95" y="40" width="10" height="48" fill="var(--neon-pink)"/>
+          <polygon points="100,40 108,54 92,54" fill="var(--neon-pink)"/>
+        </g>
+        <line x1="50" y1="95" x2="150" y2="95" stroke="var(--neon-green)" stroke-width="1.5" opacity="0.7"/>
+        <line x1="50" y1="120" x2="150" y2="120" stroke="var(--neon-purple)" stroke-width="1.5" opacity="0.7"/>
+        <line x1="50" y1="145" x2="150" y2="145" stroke="var(--neon-cyan)" stroke-width="1.5" opacity="0.7"/>
+      </svg>
+      <div class="gift-hint" style="color: var(--muted); text-align: center; margin-top: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Click to reveal</div>
+    </div>
+  </section>
+
+  <!-- ===== MAIN BIRTHDAY PAGE ===== -->
+  <main id="main" aria-label="Birthday celebration">
+    <canvas id="confetti" aria-hidden="true"></canvas>
+    
+    <div class="orbs" aria-hidden="true">
+      <div class="orb" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+      <div class="orb" style="top: 20%; right: 10%; animation-delay: 1s;"></div>
+      <div class="orb" style="bottom: 15%; left: 15%; animation-delay: 2s;"></div>
+      <div class="orb" style="top: 60%; right: 20%; animation-delay: 3s;"></div>
+      <div class="orb" style="bottom: 30%; right: 5%; animation-delay: 4s;"></div>
+    </div>
+
+    <div class="container">
+      <h1 class="neon-title">Happy Birthday <span class="name">{{name}}</span>!</h1>
+      <p class="message">
+        Many many happy returns of the day!<br>
+        May your life be filled with happiness, peace, and success.<br>
+        Stay blessed and keep shining like a neon light.
+      </p>
+  </main>
+
+  <script>
+    // ===== DYNAMIC NAME REPLACEMENT =====
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const userName = params.get('name') || 'Friend';
+      document.querySelectorAll('.name').forEach(el => el.textContent = userName);
+    })();
+
+    // ===== MATRIX RAIN ANIMATION =====
+    const matrixCanvas = document.getElementById('matrix');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    let matrixDrops = [];
+    let matrixCols = 0;
+    const matrixChars = "01アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ01";
+
+    function initMatrix() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      matrixCanvas.width = window.innerWidth * dpr;
+      matrixCanvas.height = window.innerHeight * dpr;
+      matrixCtx.scale(dpr, dpr);
+      matrixCtx.font = '14px monospace';
+      matrixCols = Math.floor(window.innerWidth / 14);
+      matrixDrops = Array(matrixCols).fill(0).map(() => Math.floor(Math.random() * -20));
+    }
+
+    function drawMatrix() {
+      matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      matrixCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      for (let i = 0; i < matrixCols; i++) {
+        const x = i * 14;
+        const y = matrixDrops[i] * 14;
+        matrixCtx.fillStyle = Math.random() > 0.9 ? '#39ff14' : `rgba(0, 255, ${Math.floor(200 + Math.random()*50)}, 0.8)`;
+        matrixCtx.fillText(matrixChars[Math.floor(Math.random() * matrixChars.length)], x, y);
+        if (y > window.innerHeight) matrixDrops[i] = 0; else matrixDrops[i]++;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+
+    // ===== COUNTDOWN =====
+    const countdownEl = document.getElementById('countdown');
+    let count = 5;
+    const countdownInterval = setInterval(() => {
+      countdownEl.textContent = count;
+      if (count <= 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('giftBox').classList.add('show');
+      }
+      count--;
+    }, 1000);
+
+    // ===== GIFT BOX CLICK =====
+    document.getElementById('giftBox').addEventListener('click', () => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('main').style.display = 'flex';
+      initConfetti();
+    });
+
+    // ===== CONFETTI ANIMATION =====
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+
+    function initConfetti() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      confettiCanvas.width = window.innerWidth * dpr;
+      confettiCanvas.height = window.innerHeight * dpr;
+      confettiCtx.scale(dpr, dpr);
+      createConfetti();
+    }
+
+    function createConfetti() {
+      const colors = ['#00f3ff', '#ff00e1', '#39ff14', '#7a00ff', '#4dc9ff'];
+      confettiParticles = [];
+      for (let i = 0; i < 150; i++) {
+        confettiParticles.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          size: Math.random() * 6 + 2,
+          speedY: Math.random() * 2 + 1,
+          speedX: Math.random() * 1.5 - 0.75,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 4 - 2
+        });
+      }
+      drawConfetti();
+    }
+
+    function drawConfetti() {
+      confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      confettiParticles.forEach(p => {
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate(p.rotation * Math.PI / 180);
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          confettiCtx.lineTo(Math.cos((i - 2) * 0.3) * p.size, -Math.sin((i - 2) * 0.3) * p.size);
+          confettiCtx.lineTo(Math.cos((i - 1.5) * 0.3) * p.size * 0.6, -Math.sin((i - 1.5) * 0.3) * p.size * 0.6);
+        }
+        confettiCtx.closePath();
+        confettiCtx.fill();
+        confettiCtx.restore();
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotationSpeed;
+        if (p.y > window.innerHeight) p.y = -10;
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+
+    // ===== SOUND EFFECTS (Optional) =====
+    const audioCtx = new (AudioContext || webkitAudioContext)();
+    function playSound(frequency = 440, duration = 0.1) {
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.frequency.value = frequency;
+      oscillator.type = 'sine';
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    // Uncomment to enable sound on gift click:
+    // document.getElementById('giftBox').addEventListener('click', () => playSound(660, 0.2));
+    // document.getElementById('celebrateBtn').addEventListener('click', () => playSound(880, 0.3));
+
+    // ===== RESIZE HANDLER =====
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        initMatrix();
+        if (document.getElementById('main').style.display === 'flex') initConfetti();
+      }, 250);
+    });
+
+    // ===== INITIALIZE =====
+    initMatrix();
+    drawMatrix();
+  </script>
+</body>
+</html>
